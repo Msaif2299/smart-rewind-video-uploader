@@ -8,7 +8,12 @@ from botocore.exceptions import ClientError
 import uuid
 import os
 
-def upload(s3_resource):
+def upload(file_name) -> Exception|bool:
+    if file_name is None:
+        raise Exception("No filename found")
+    if not os.path.exists(file_name):
+        raise Exception(f"Couldn't find file {file_name}. Are you sure it exists?")
+    
     bucket_name = f"msc-test-{uuid.uuid4()}"
     bucket = s3_resource.Bucket(bucket_name)
     try:
@@ -22,13 +27,7 @@ def upload(s3_resource):
         print(f"Tried and failed to create demo bucket {bucket_name}.")
         print(f"\t{err.response['Error']['Code']}:{err.response['Error']['Message']}")
         print(f"\nCan't continue the demo without a bucket!")
-        return
-    file_name = None
-    while file_name is None:
-        file_name = "./assets/testfile.txt"
-        if not os.path.exists(file_name):
-            print(f"Couldn't find file {file_name}. Are you sure it exists?")
-            file_name = None
+        return False
 
     obj = bucket.Object(os.path.basename(file_name))
     try:
@@ -39,6 +38,8 @@ def upload(s3_resource):
     except S3UploadFailedError as err:
         print(f"Couldn't upload file {file_name} to {bucket.name}.")
         print(f"\t{err}")
+        return False
+    return True
 
 if __name__=="__main__":
     os.environ['AWS_PROFILE'] = "default"
