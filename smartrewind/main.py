@@ -1,0 +1,33 @@
+from person_tracking import PersonTracking
+import boto3
+from sqs import Queue
+from video import Video
+from timeline_segment import TimelineSegment
+from compressor import extract_timeslots
+from video import BUCKET_NAME
+
+name = "aphasia"
+iam_resource = boto3.resource("iam")
+sns_resource = boto3.resource("sns")
+sqs_resource = boto3.resource("sqs")
+rekognition_client = boto3.client("rekognition")
+
+directory_path = "C:/Users/Mohammad Saif/Documents/Masters/MSc Project/code/smartrewind/assets/"
+results_file_path = directory_path+"results.txt"
+segments_results_file_path = directory_path+"results-segments.txt"
+video_name = "test.mp4"
+video_path = directory_path+video_name
+output_metadata_file_path = directory_path+f"{video_name.split(".")[0]}_metadata.txt"
+
+video = Video(path=directory_path+video_name, object={"S3Object": {"Bucket": BUCKET_NAME, "Name": video_name}})
+
+queue = Queue(notif_channel_name=name, iam_resource=iam_resource, sns_resource=sns_resource, sqs_resource=sqs_resource)
+queue.create()
+
+processor = PersonTracking(name=name, queue=queue, video=video, rekognition_client=rekognition_client, results_file_name=results_file_path)
+processor.detect_faces()
+
+processor = TimelineSegment(name=name, queue=queue, video=video, rekognition_client=rekognition_client, results_file_name=segments_results_file_path)
+processor.segment()
+
+extract_timeslots(results_file_path, segments_results_file_path, output_metadata_file_path)

@@ -1,1 +1,5 @@
-assets/*
+smartrewind/assets
+smartrewind/__pycache__
+smartrewind/tests/__pycache__
+venv
+smartrewind.egg-info

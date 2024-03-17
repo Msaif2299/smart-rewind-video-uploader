@@ -1,0 +1,13 @@
+[project]
+requires-python = ">= 3.8"
+name="smartrewind"
+version="0.1.0"
+description="Smart Rewind Video Player for Accessibility Interventions"
+dependencies=[
+    "boto3",
+    "botocore"
+]
+
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
