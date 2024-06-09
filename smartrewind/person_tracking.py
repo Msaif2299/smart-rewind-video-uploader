@@ -19,7 +19,7 @@ class PersonTracking(Rekognition):
     def __init__(self, name, queue, video, rekognition_client, results_file_name) -> None:
         super().__init__(name, queue, video, rekognition_client)
         self.collection = None
-        self.collection_id = "aphasia"
+        self.collection_id = "aphasia-sample1"
         self.results_file_name = results_file_name
 
     def create_collection(self):
@@ -31,7 +31,7 @@ class PersonTracking(Rekognition):
 
     def load_images_to_collection(self):
         should_upload = True
-        directory_path = "C:/Users/Mohammad Saif/Documents/Masters/MSc Project/code/smartrewind/assets/collection"
+        directory_path = "C:/Users/Mohammad Saif/Documents/Masters/MSc Project/video_metadata_generator/smartrewind/assets/sample_collection"
         directory = os.fsencode(directory_path)
         for file in os.listdir(directory):
             filename = os.fsdecode(file)
@@ -49,7 +49,7 @@ class PersonTracking(Rekognition):
                                   DetectionAttributes=['DEFAULT'])
             except ClientError as e:
                 print(f"Error encountered for {filename}: {e}")
-            with open("C:/Users/Mohammad Saif/Documents/Masters/MSc Project/code/smartrewind/assets/api_response_index_faces_" + character.name + ".txt", "w") as f:
+            with open("C:/Users/Mohammad Saif/Documents/Masters/MSc Project/video_metadata_generator/smartrewind/assets/api_response_index_faces_" + character.name + ".txt", "w") as f:
                 print(response, file=f)
 
 

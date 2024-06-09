@@ -2,16 +2,17 @@ import json
 from botocore.exceptions import ClientError
 from sns import SNS
 from iam import IAM
+from typing import Dict
 
 class Queue:
-    def __init__(self, notif_channel_name, iam_resource, sns_resource, sqs_resource) -> None:
+    def __init__(self, notif_channel_name: str, iam_resource, sns_resource, sqs_resource) -> None:
         self.resource_name = notif_channel_name
         self.iam_resource = iam_resource
         self.sns_resource = sns_resource
         self.sqs_resource = sqs_resource
-        self.topic = None
-        self.queue = None
-        self.role = None
+        self.topic: SNS|None = None
+        self.queue: Queue|None = None
+        self.role: IAM|None = None
 
 
     def create(self):
@@ -48,7 +49,7 @@ class Queue:
         self.topic.subscribe(Protocol="sqs", Endpoint=queue_arn)
         self.role = IAM(self.resource_name, self.iam_resource, self.topic).get_role()
 
-    def get_notification_channel(self):
+    def get_notification_channel(self) -> Dict:
         return {
             "RoleArn": self.role.arn, 
             "SNSTopicArn": self.topic.arn
@@ -68,7 +69,7 @@ class Queue:
                 if job_id != message["JobId"]:
                     raise RuntimeError
                 status = message["Status"]
-                print("Got message %s with status %s.", message["JobId"], status)
+                print(f"Got message {str(message["JobId"])} with status {str(status)}.")
                 messages[0].delete()
                 job_done = True
         return status

@@ -1,17 +1,28 @@
+from typing import Dict, List
 THRESHOLD_IN_MS = 5000
 
-def extract_character_time_slots(input_file):
+def extract_character_time_slots(input_file: str) -> Dict:
     results = []
     with open(input_file, "r") as f:
-        results = eval(f.read())
+        data = f.read()
+        if data == "" or data is None:
+            print(f"No data found in input file {input_file}, aborting character timeslot extraction...")
+            return {}
+        results = eval(data)
     analysis = {}
     for item in results:
-        character = item['character']
+        try:
+            character = item['character']
+        except KeyError:
+            continue
         if character == 'unknown':
             continue
         if character not in analysis:
             analysis[character] = []
-        analysis[character].append(item['timestamp'])
+        try:
+            analysis[character].append(item['timestamp'])
+        except KeyError:
+            continue
     for character in analysis:
         analysis[character] = sorted(analysis[character])
     slots = {}
@@ -32,13 +43,23 @@ def extract_character_time_slots(input_file):
 
     return slots
 
-def extract_segment_timeslots(input_file_name):
+def extract_segment_timeslots(input_file: str) -> List[List[int]]:
     input_segments = []
-    with open(input_file_name, "r") as f:
-        input_segments = eval(f.read())
+    with open(input_file, "r") as f:
+        data = f.read()
+        if data == "" or data is None:
+            print(f"No data found in input file {input_file}, aborting character segment extraction...")
+            return []
+        input_segments = eval(data)
     slots =  input_segments[0]["segments"]
+    if len(slots) == 0:
+        return []
     slots[0][0] = 0
-    slots[-1][-1] = input_segments[0]["total_duration"]
+    try:
+        slots[-1][-1] = input_segments[0]["total_duration"]
+    except KeyError:
+        print(f"No total duration found in {input_file}, aborting segment extraction...")
+        return []
     for idx, _ in enumerate(slots[:-1]):
         slots[idx][1] = slots[idx+1][0]
     return slots

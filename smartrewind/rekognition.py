@@ -34,7 +34,7 @@ class Rekognition:
                 response = get_results_func(JobId=job_id, NextToken=pagination_token)
                 print("Job %s has status: %s.", job_id, response["JobStatus"])
                 results = result_extractor(response)
-                with open("C:/Users/Mohammad Saif/Documents/Masters/MSc Project/code/smartrewind/assets/results-raw.txt", "w") as f:
+                with open("C:/Users/Mohammad Saif/Documents/Masters/MSc Project/video_metadata_generator/smartrewind/assets/results-raw.txt", "w") as f:
                     print(response, file=f)
                 for r in results:
                     overall_results.append(r)

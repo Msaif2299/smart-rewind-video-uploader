@@ -6,22 +6,23 @@ import boto3
 from boto3.s3.transfer import S3UploadFailedError
 from botocore.exceptions import ClientError
 import os
+from typing import Dict
 
 BUCKET_NAME = "msc-test-final-bucket-2"
 
 class Object:
-    def __init__(self, path, object=None) -> None:
+    def __init__(self, path, object=Dict|None) -> None:
         self.path = path
         self.name = os.path.basename(path)
         self.bucket_name = BUCKET_NAME
         self.object = object
     
-    def get_object(self):
+    def get_object(self) -> Dict:
         if self.object is None:
             self.object = self.upload()
         return self.object
         
-    def upload(self):
+    def upload(self) -> Dict|None:
         if self.path is None or self.path == "":
             raise Exception("No filename found")
         if not os.path.exists(self.path):
@@ -58,11 +59,11 @@ class Object:
         return {"S3Object": {"Bucket": obj.bucket_name, "Name": obj.key}}
 
 class Image(Object):
-    def __init__(self, path, object=None) -> None:
+    def __init__(self, path, object=Dict|None) -> None:
         super().__init__(path, object)
 
 class Video(Object):
-    def __init__(self, path, object=None) -> None:
+    def __init__(self, path, object=Dict|None) -> None:
         super().__init__(path, object)
 
 if __name__=="__main__":
