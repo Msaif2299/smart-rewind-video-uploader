@@ -1,9 +1,9 @@
-from rekognition import Rekognition
+from .rekognition import Rekognition
 from dataclasses import dataclass
 import os
-from video import Image, BUCKET_NAME
+from .video import Image, BUCKET_NAME
 from botocore.exceptions import ClientError
-from rekognition_objects import RekognitionCollectionTracking
+from .rekognition_objects import RekognitionCollectionTracking
 
 @dataclass
 class Character:
@@ -15,12 +15,13 @@ class Collection:
     id: str
     arn: str
 
-class PersonTracking(Rekognition):
-    def __init__(self, name, queue, video, rekognition_client, results_file_name) -> None:
+class CharacterTracking(Rekognition):
+    def __init__(self, name, queue, video, rekognition_client, s3_resource, results_file_name) -> None:
         super().__init__(name, queue, video, rekognition_client)
         self.collection = None
         self.collection_id = "aphasia-sample1"
         self.results_file_name = results_file_name
+        self.s3_resource = s3_resource
 
     def create_collection(self):
         try:
@@ -36,7 +37,7 @@ class PersonTracking(Rekognition):
         for file in os.listdir(directory):
             filename = os.fsdecode(file)
             if should_upload:
-                s3_object = Image(directory_path + '/' + filename).get_object()
+                s3_object = Image(directory_path + '/' + filename, self.s3_resource).get_object()
             else:
                 s3_object = {"S3Object": {"Bucket": BUCKET_NAME, "Name": filename}}
             character = Character(filename.split(".")[0], s3_object)

@@ -6,30 +6,30 @@ import boto3
 from boto3.s3.transfer import S3UploadFailedError
 from botocore.exceptions import ClientError
 import os
-from typing import Dict
+from typing import Dict, Optional
 
 BUCKET_NAME = "msc-test-final-bucket-2"
 
 class Object:
-    def __init__(self, path, object=Dict|None) -> None:
+    def __init__(self, path, s3_resource, object=Optional[Dict]) -> None:
         self.path = path
         self.name = os.path.basename(path)
         self.bucket_name = BUCKET_NAME
         self.object = object
+        self.s3_resource = s3_resource
     
     def get_object(self) -> Dict:
         if self.object is None:
             self.object = self.upload()
         return self.object
         
-    def upload(self) -> Dict|None:
+    def upload(self) -> Optional[Dict]:
         if self.path is None or self.path == "":
             raise Exception("No filename found")
         if not os.path.exists(self.path):
             raise Exception(f"Couldn't find file {self.path}. Are you sure it exists?")
-        s3_resource=boto3.resource("s3", region_name='us-west-2')
         self.bucket_name = f"msc-test-final-bucket-2"
-        bucket = s3_resource.Bucket(self.bucket_name)
+        bucket = self.s3_resource.Bucket(self.bucket_name)
         try:
             bucket.meta.client.head_bucket(Bucket=self.bucket_name)
         except ClientError as err:
@@ -37,7 +37,7 @@ class Object:
             try:
                 bucket.create(
                     CreateBucketConfiguration={
-                        "LocationConstraint": s3_resource.meta.client.meta.region_name
+                        "LocationConstraint": self.s3_resource.meta.client.meta.region_name
                     }
                 )
                 print(f"Created demo bucket named {bucket.name}.")
@@ -59,14 +59,9 @@ class Object:
         return {"S3Object": {"Bucket": obj.bucket_name, "Name": obj.key}}
 
 class Image(Object):
-    def __init__(self, path, object=Dict|None) -> None:
-        super().__init__(path, object)
+    def __init__(self, path, s3_resource, object=Optional[Dict]) -> None:
+        super().__init__(path, s3_resource, object)
 
 class Video(Object):
-    def __init__(self, path, object=Dict|None) -> None:
-        super().__init__(path, object)
-
-if __name__=="__main__":
-    os.environ['AWS_PROFILE'] = "default"
-    os.environ['AWS_DEFAULT_REGION'] = "us-west-2"
-    test_file = "C:/Users/Mohammad Saif/Documents/Masters/MSc Project/code/smartrewind/assets/testfile.txt"
+    def __init__(self, path, s3_resource, object=Optional[Dict]) -> None:
+        super().__init__(path, s3_resource, object)

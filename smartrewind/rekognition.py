@@ -1,5 +1,5 @@
 from botocore.exceptions import ClientError
-from rekognition_objects import RekognitionPerson
+from .rekognition_objects import RekognitionPerson
 class Rekognition:
     def __init__(self, name, queue, video, rekognition_client) -> None:
         self.name = name
@@ -69,7 +69,7 @@ class Rekognition:
         self.move_to_file(results=results, results_file_name=results_file_name)
         return results
 
-    def personTracking(self, results_file_name):
+    def test_person_tracking(self, results_file_name):
         return self._do_rekognition_job(
             "person tracking",
             self.rekognition_client.start_person_tracking,
@@ -80,17 +80,3 @@ class Rekognition:
             ],
             results_file_name
         )
-    #Finish collection testing on 15th March 2024 - done
-    # Collections works, add handling of side and back view of characters as well - 16th March 2024
-    # Write the compressor as a function and make it generate the metadata file - 16th March 2024
-    # Make the shot segmentation api as well and put it all in one function - 16th March 2024
-    #TODO test with collections first, keep this code separate, once we are sure its not possible or isnt very accurate, apply the below logic
-    #If failure, implement the failure condition by 16th March 2024
-    #TODO see if its possible to filter out frames when each person was alone, and then apply a face matching algorithm to see which char is who
-    # 1. Consolidate the results
-    # 2. From each character, see if there exists a timezone when the character is alone in a picture, take the bounding boxes from the response and crop the image
-    # 3. Take that frame out, apply image matching from current set of characters
-    # 4. Take the highest similarity matching character and assign its name to that index
-    # 5. If necessary, choose multiple such instances if values are bad
-    # 6. Drop the rest of the characters if needed
-    #TODO Add a loop for handling tokenisations until no tokens are received and store them in file

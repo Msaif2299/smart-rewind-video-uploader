@@ -33,6 +33,8 @@ class IAM:
                 except ClientError:
                     raise Exception(f"Couldn't load role {self.name}")
                 print(f"Role {self.name} already exists, creating policy instead")
+            else:
+                raise Exception(json.dumps(e.response))
         try:
             policy = self.resource.create_policy(
                 PolicyName=self.name,

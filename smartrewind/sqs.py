@@ -1,7 +1,7 @@
 import json
 from botocore.exceptions import ClientError
-from sns import SNS
-from iam import IAM
+from .sns import SNS
+from .iam import IAM
 from typing import Dict
 
 class Queue:
@@ -69,7 +69,7 @@ class Queue:
                 if job_id != message["JobId"]:
                     raise RuntimeError
                 status = message["Status"]
-                print(f"Got message {str(message["JobId"])} with status {str(status)}.")
+                print(f'Got message {str(message["JobId"])} with status {str(status)}.')
                 messages[0].delete()
                 job_done = True
         return status
