@@ -7,8 +7,8 @@ class TimelineSegment(Rekognition):
         self.results_file_name = results_file_name
 
     def segment(self):
-        min_Technical_Cue_Confidence = 80.0
-        min_Shot_Confidence = 80.0
+        min_technical_cue_confidence = 80.0
+        min_shot_confidence = 80.0
         max_pixel_threshold = 0.1
         min_coverage_percentage = 60
         return self._do_rekognition_job(
@@ -26,9 +26,9 @@ class TimelineSegment(Rekognition):
                         "MaxPixelThreshold": max_pixel_threshold,
                         "MinCoveragePercentage": min_coverage_percentage,
                     },
-                    "MinSegmentConfidence": min_Technical_Cue_Confidence,
+                    "MinSegmentConfidence": min_technical_cue_confidence,
                 },
-                "ShotFilter": {"MinSegmentConfidence": min_Shot_Confidence},
+                "ShotFilter": {"MinSegmentConfidence": min_shot_confidence},
             }
         )
     

@@ -1,7 +1,7 @@
 from .rekognition import Rekognition
 from dataclasses import dataclass
 import os
-from .video import Image, BUCKET_NAME
+from .s3 import Image, BUCKET_NAME
 from botocore.exceptions import ClientError
 from .rekognition_objects import RekognitionCollectionTracking
 

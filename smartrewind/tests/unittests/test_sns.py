@@ -1,13 +1,5 @@
 from smartrewind.sns import SNS
-class MockSNSTopic:
-    def __init__(self) -> None:
-        self.arn = "test"
-    def subscribe(self, Protocol, Endpoint):
-        pass
-class MockSNSResource:
-    def create_topic(self, Name):
-        return MockSNSTopic()
-    
+from ..mocks.sns import MockSNSResource
 
 def test_sns_create():
     SNS("test", MockSNSResource()).create()

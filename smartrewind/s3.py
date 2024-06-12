@@ -2,7 +2,6 @@
 Code Source: https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/python/example_code/s3/s3_basics/scenario_getting_started.py
 """
 
-import boto3
 from boto3.s3.transfer import S3UploadFailedError
 from botocore.exceptions import ClientError
 import os

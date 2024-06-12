@@ -1,5 +1,4 @@
 import json
-from botocore.exceptions import ClientError
 from .sns import SNS
 from .iam import IAM
 from typing import Dict
@@ -10,7 +9,7 @@ class Queue:
         self.iam_resource = iam_resource
         self.sns_resource = sns_resource
         self.sqs_resource = sqs_resource
-        self.topic: SNS|None = None
+        self.topic = None
         self.queue: Queue|None = None
         self.role: IAM|None = None
 

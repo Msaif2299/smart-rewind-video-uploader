@@ -57,11 +57,11 @@ class IAM:
                     policies = list(self.resource.policies.filter(Scope='Local'))
                 except ClientError as e:
                     raise Exception(f"Error while fetching policy {self.name}: {e}")
-                policyFound = False
+                is_policy_found = False
                 for p in policies:
                     if p.meta.data['PolicyName'] == self.name:
-                        policy, policyFound = p, True
-                if not policyFound:
+                        policy, is_policy_found = p, True
+                if not is_policy_found:
                     raise Exception(f"Policy {self.name} not found")
                 print(f"Policy {self.name} already exists")
         self.role.attach_policy(PolicyArn=policy.arn)

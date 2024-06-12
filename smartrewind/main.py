@@ -1,10 +1,10 @@
-from person_tracking import CharacterTracking
+from smartrewind.char_segment import CharacterTracking
 import boto3
 from sqs import Queue
-from video import Video
-from timeline_segment import TimelineSegment
+from smartrewind.s3 import Video
+from smartrewind.scene_segment import TimelineSegment
 from compressor import extract_timeslots
-from video import BUCKET_NAME
+from smartrewind.s3 import BUCKET_NAME
 
 name = "aphasia"
 iam_resource = boto3.resource("iam")

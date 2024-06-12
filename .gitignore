@@ -1,9 +1,8 @@
 smartrewind/assets
-smartrewind/__pycache__
-smartrewind/tests/__pycache__
 venv
 smartrewind.egg-info
 .coverage
 .vscode
 .venv
 .pytest_cache
+*pycache*
