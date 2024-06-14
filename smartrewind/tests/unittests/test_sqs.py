@@ -1,8 +1,8 @@
 import pytest
-from smartrewind.sqs import Queue
-from ..mocks.iam import MockIAMResource, MockIAMResourceErrorCases
-from ..mocks.sns import MockSNSResource
-from ..mocks.sqs import MockSQSResource
+from smartrewind.backend.sqs import Queue
+from smartrewind.tests.mocks.iam import MockIAMResource, MockIAMResourceErrorCases
+from smartrewind.tests.mocks.sns import MockSNSResource
+from smartrewind.tests.mocks.sqs import MockSQSResource
 
 def test_sqs_create():
     Queue("test", MockIAMResource(MockIAMResourceErrorCases()), MockSNSResource(), MockSQSResource()).create()

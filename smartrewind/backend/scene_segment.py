@@ -1,5 +1,5 @@
-from .rekognition import Rekognition
-from .rekognition_objects import RekognitionTimelineSegmentation
+from smartrewind.backend.rekognition import Rekognition
+from smartrewind.backend.rekognition_objects import RekognitionTimelineSegmentation
 
 class TimelineSegment(Rekognition):
     def __init__(self, name, queue, video, rekognition_client, results_file_name) -> None:

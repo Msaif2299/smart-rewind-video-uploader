@@ -1,9 +1,9 @@
-from .rekognition import Rekognition
+from smartrewind.backend.rekognition import Rekognition
 from dataclasses import dataclass
 import os
-from .s3 import Image, BUCKET_NAME
+from smartrewind.backend.s3 import Image, BUCKET_NAME
 from botocore.exceptions import ClientError
-from .rekognition_objects import RekognitionCollectionTracking
+from smartrewind.backend.rekognition_objects import RekognitionCollectionTracking
 
 @dataclass
 class Character:
@@ -16,12 +16,13 @@ class Collection:
     arn: str
 
 class CharacterTracking(Rekognition):
-    def __init__(self, name, queue, video, rekognition_client, s3_resource, results_file_name) -> None:
+    def __init__(self, name, queue, video, rekognition_client, s3_resource, collection_id, collection_folder, results_file_name) -> None:
         super().__init__(name, queue, video, rekognition_client)
         self.collection = None
-        self.collection_id = "aphasia-sample1"
+        self.collection_id = collection_id
         self.results_file_name = results_file_name
         self.s3_resource = s3_resource
+        self.collection_folder = collection_folder
 
     def create_collection(self):
         try:
@@ -32,12 +33,11 @@ class CharacterTracking(Rekognition):
 
     def load_images_to_collection(self):
         should_upload = True
-        directory_path = "C:/Users/Mohammad Saif/Documents/Masters/MSc Project/video_metadata_generator/smartrewind/assets/sample_collection"
-        directory = os.fsencode(directory_path)
+        directory = os.fsencode(self.collection_folder)
         for file in os.listdir(directory):
             filename = os.fsdecode(file)
             if should_upload:
-                s3_object = Image(directory_path + '/' + filename, self.s3_resource).get_object()
+                s3_object = Image(self.collection_folder + '/' + filename, self.s3_resource).get_object()
             else:
                 s3_object = {"S3Object": {"Bucket": BUCKET_NAME, "Name": filename}}
             character = Character(filename.split(".")[0], s3_object)
@@ -50,8 +50,6 @@ class CharacterTracking(Rekognition):
                                   DetectionAttributes=['DEFAULT'])
             except ClientError as e:
                 print(f"Error encountered for {filename}: {e}")
-            with open("C:/Users/Mohammad Saif/Documents/Masters/MSc Project/video_metadata_generator/smartrewind/assets/api_response_index_faces_" + character.name + ".txt", "w") as f:
-                print(response, file=f)
 
 
     def detect_faces(self):

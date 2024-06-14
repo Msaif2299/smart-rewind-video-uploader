@@ -1,6 +1,6 @@
-from smartrewind.s3 import Video, Image
+from smartrewind.backend.s3 import Video, Image
 import pytest
-from ..mocks.s3 import MockS3Resource, MockS3ResourceErrorCases
+from smartrewind.tests.mocks.s3 import MockS3Resource, MockS3ResourceErrorCases
 
 def test_video():
     Video("smartrewind/tests/test_assets/results.txt", MockS3Resource('us-west-2'), None).get_object()

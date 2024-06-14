@@ -1,8 +1,8 @@
-from smartrewind.iam import IAM
-from smartrewind.sns import SNS
+from smartrewind.backend.iam import IAM
+from smartrewind.backend.sns import SNS
 import pytest
-from ..mocks.sns import MockSNSResource
-from ..mocks.iam import MockIAMResource, MockIAMResourceErrorCases
+from smartrewind.tests.mocks.sns import MockSNSResource
+from smartrewind.tests.mocks.iam import MockIAMResource, MockIAMResourceErrorCases
 
 def test_iam_create():
     IAM("test", MockIAMResource(MockIAMResourceErrorCases()), SNS("test", MockSNSResource()).get_topic()).create()

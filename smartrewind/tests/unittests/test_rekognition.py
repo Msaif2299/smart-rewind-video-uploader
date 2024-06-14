@@ -1,12 +1,12 @@
 import pytest
-from smartrewind.rekognition import Rekognition
-from smartrewind.sqs import Queue
-from smartrewind.s3 import Video
-from ..mocks.sqs import MockSQSResource
-from ..mocks.iam import MockIAMResource
-from ..mocks.sns import MockSNSResource
-from ..mocks.rekognition import MockRekognitionClient, MockRekognitionClientErrorCases
-from ..mocks.s3 import MockS3Resource
+from smartrewind.backend.rekognition import Rekognition
+from smartrewind.backend.sqs import Queue
+from smartrewind.backend.s3 import Video
+from smartrewind.tests.mocks.sqs import MockSQSResource
+from smartrewind.tests.mocks.iam import MockIAMResource
+from smartrewind.tests.mocks.sns import MockSNSResource
+from smartrewind.tests.mocks.rekognition import MockRekognitionClient, MockRekognitionClientErrorCases
+from smartrewind.tests.mocks.s3 import MockS3Resource
 import os
 
 @pytest.mark.parametrize(

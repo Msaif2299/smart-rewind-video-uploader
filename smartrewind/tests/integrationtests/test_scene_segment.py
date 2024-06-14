@@ -1,11 +1,11 @@
-from ..mocks.rekognition import MockRekognitionClient
-from ..mocks.iam import MockIAMResource
-from ..mocks.sns import MockSNSResource
-from ..mocks.sqs import MockSQSResource
-from ..mocks.s3 import MockS3Resource
-from smartrewind.sqs import Queue
-from smartrewind.scene_segment import TimelineSegment
-from smartrewind.s3 import Video
+from smartrewind.tests.mocks.rekognition import MockRekognitionClient
+from smartrewind.tests.mocks.iam import MockIAMResource
+from smartrewind.tests.mocks.sns import MockSNSResource
+from smartrewind.tests.mocks.sqs import MockSQSResource
+from smartrewind.tests.mocks.s3 import MockS3Resource
+from smartrewind.backend.sqs import Queue
+from smartrewind.backend.scene_segment import TimelineSegment
+from smartrewind.backend.s3 import Video
 import os
 
 def test_rekognition_scene_segment():

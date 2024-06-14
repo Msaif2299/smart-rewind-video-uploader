@@ -1,5 +1,5 @@
 from botocore.exceptions import ClientError
-from .rekognition_objects import RekognitionPerson
+from smartrewind.backend.rekognition_objects import RekognitionPerson
 class Rekognition:
     def __init__(self, name, queue, video, rekognition_client) -> None:
         self.name = name

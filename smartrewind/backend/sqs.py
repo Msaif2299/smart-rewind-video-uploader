@@ -1,6 +1,6 @@
 import json
-from .sns import SNS
-from .iam import IAM
+from smartrewind.backend.sns import SNS
+from smartrewind.backend.iam import IAM
 from typing import Dict
 
 class Queue:
