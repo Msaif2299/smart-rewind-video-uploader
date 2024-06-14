@@ -1,5 +1,5 @@
 from smartrewind.backend.sns import SNS
-from smartrewind.tests.mocks.sns import MockSNSResource
+from smartrewind.backend.tests.mocks.sns import MockSNSResource
 
 def test_sns_create():
     SNS("test", MockSNSResource()).create()

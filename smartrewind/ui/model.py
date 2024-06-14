@@ -1,9 +1,9 @@
 from PyQt5.QtCore import pyqtSignal, QObject
-from smartrewind.tests.mocks.iam import MockIAMResource
-from smartrewind.tests.mocks.sns import MockSNSResource
-from smartrewind.tests.mocks.sqs import MockSQSResource
-from smartrewind.tests.mocks.s3 import MockS3Resource
-from smartrewind.tests.mocks.rekognition import MockRekognitionClient
+from smartrewind.backend.tests.mocks.iam import MockIAMResource
+from smartrewind.backend.tests.mocks.sns import MockSNSResource
+from smartrewind.backend.tests.mocks.sqs import MockSQSResource
+from smartrewind.backend.tests.mocks.s3 import MockS3Resource
+from smartrewind.backend.tests.mocks.rekognition import MockRekognitionClient
 from smartrewind.progresstracker.statemachine import ProgressStateMachine
 class Model(QObject):
     status_button_update_signal = pyqtSignal()

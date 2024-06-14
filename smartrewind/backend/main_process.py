@@ -10,13 +10,6 @@ from smartrewind.progresstracker.statemachine import ProgressStateMachine
 from typing import Optional
 import time
 
-name = "aphasia"
-iam_resource = boto3.resource("iam")
-sns_resource = boto3.resource("sns")
-sqs_resource = boto3.resource("sqs")
-rekognition_client = boto3.client("rekognition")
-s3_resource = boto3.resource("s3", region_name='us-west-2')
-
 def emit(progress_state_machine:Optional[ProgressStateMachine], value: int, message: str):
     if progress_state_machine is not None:
         progress_state_machine.forward_progress_signal.emit(value, message)

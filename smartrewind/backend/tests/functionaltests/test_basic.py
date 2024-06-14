@@ -1,16 +1,10 @@
-from smartrewind.backend.char_segment import CharacterTracking
-from smartrewind.backend.sqs import Queue
-from smartrewind.backend.s3 import Video
-from smartrewind.backend.scene_segment import TimelineSegment
-from smartrewind.backend.compressor import extract_timeslots
-from smartrewind.tests.mocks.iam import MockIAMResource
-from smartrewind.tests.mocks.rekognition import MockRekognitionClient
-from smartrewind.tests.mocks.sns import MockSNSResource
-from smartrewind.tests.mocks.sqs import MockSQSResource
-from smartrewind.tests.mocks.s3 import MockS3Resource
+from smartrewind.backend.tests.mocks.iam import MockIAMResource
+from smartrewind.backend.tests.mocks.rekognition import MockRekognitionClient
+from smartrewind.backend.tests.mocks.sns import MockSNSResource
+from smartrewind.backend.tests.mocks.sqs import MockSQSResource
+from smartrewind.backend.tests.mocks.s3 import MockS3Resource
 from smartrewind.backend.main_process import process_video
 import pytest
-import os
 
 @pytest.fixture()
 def generated_meta_data_dict():
@@ -19,7 +13,7 @@ def generated_meta_data_dict():
     sqs_resource = MockSQSResource()
     rekognition_client = MockRekognitionClient()
     s3_resource = MockS3Resource('us-west-2')
-    output_directory_path = "./smartrewind/tests/test_assets/"
+    output_directory_path = "./smartrewind/backend/tests/test_assets/"
     video_file_name = "dummy_sample_video.mp4"
     video_name = video_file_name.split(".")[0]
     output_metadata_file_path = output_directory_path+f"{video_name}_metadata.txt"
