@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QVBoxLayout, QHB
 import sys
 from smartrewind.ui.controller import Controller
 from smartrewind.ui.model import Model
+from logger import Logger
+import traceback
 class Viewer(QMainWindow):
     def __init__(self, controller: Controller) -> None:
         super().__init__()
@@ -37,13 +39,13 @@ class Viewer(QMainWindow):
         layout.addWidget(self.controller.start_process_button)
         self.central_layout.addLayout(layout)
 
-def launch_app():
-    app = QApplication(sys.argv)
-    m = Model()
-    c = Controller(m)
-    w = Viewer(c)
-    w.show()
-    app.exec_()
-
-if __name__ == "__main__":
-    launch_app()
+def launch_app(logger: Logger):
+    try:
+        app = QApplication(sys.argv)
+        m = Model(logger)
+        c = Controller(m)
+        w = Viewer(c)
+        w.show()
+        app.exec_()
+    except Exception as e:
+        logger.log(traceback.format_exc())

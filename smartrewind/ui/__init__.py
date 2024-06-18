@@ -1,1 +1,1 @@
-from .viewer import launch_app
+from smartrewind.ui.viewer import launch_app
