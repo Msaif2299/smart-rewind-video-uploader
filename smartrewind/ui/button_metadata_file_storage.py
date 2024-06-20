@@ -19,7 +19,10 @@ class ChooseMetadataFileStorageButton(ComboButton):
         if old_metadata_storage_loc == "." and self.model.video_file_location != "":
             old_metadata_storage_loc =  "/".join(self.model.video_file_location.split("/")[:-1])
         
-        folder_location = QFileDialog.getExistingDirectory(self, "Choose Metadata File Storage Location", old_metadata_storage_loc)
+        folder_location = QFileDialog.getExistingDirectory(
+            self, 
+            "Choose Metadata File Storage Location", 
+            old_metadata_storage_loc)
         if folder_location != "" and folder_location is not None:
             self.model.metadata_file_storage_location = folder_location
         self.set_text(self.model.metadata_file_storage_location)

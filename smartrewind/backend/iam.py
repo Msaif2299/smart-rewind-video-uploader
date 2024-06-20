@@ -29,7 +29,7 @@ class IAM:
                 ),
             )
             self.logger.log(Logger.Level.DEBUG, {
-                "response": self.role,
+                "response": self.role.__dict__,
                 "params": {
                     "rolename": self.name
                 },

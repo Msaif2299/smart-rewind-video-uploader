@@ -4,5 +4,5 @@ from smartrewind.logger import Logger
 logging_folder = "./logs"
 logger = Logger(logging_folder)
 logger.start()
-launch_app()
+launch_app(logger=logger, debug=True)
 logger.stop()

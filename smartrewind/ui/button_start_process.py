@@ -19,7 +19,9 @@ class StartProcessButton(QPushButton):
 
     def enable(self):
         self.model.refresh_generation_objects_signal.emit()
-        if self.model.video_file_location != "" and self.model.collection_folder_location != "" and self.model.metadata_file_storage_location != "":
+        if (self.model.video_file_location != "" and 
+            self.model.collection_folder_location != "" and 
+            self.model.metadata_file_storage_location != ""):
             self.setEnabled(True)
             return
         self.setEnabled(False)
@@ -34,6 +36,7 @@ class StartProcessButton(QPushButton):
             self.model.video_file_location,
             self.model.collection_folder_location,
             self.model.metadata_file_storage_location,
+            self.model.logger,
             self.model.progress_machine,
         ))
         self.start_processing_window()

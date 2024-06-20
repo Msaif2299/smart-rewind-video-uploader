@@ -21,7 +21,17 @@ def test_rekognition_character_tracking(logger: Logger):
     vid = Video("smartrewind/backend/tests/test_assets/results.txt", MockS3Resource("test"), logger, None)
     temp_test_file = "smartrewind/backend/tests/test_assets/rekognition_temp.txt"
     collection_folder = "smartrewind/assets/sample_collection"
-    CharacterTracking("test", q, vid, MockRekognitionClient(), MockS3Resource("test"), "test", collection_folder, temp_test_file, logger).detect_faces()
+    CharacterTracking(
+        "test", 
+        q, 
+        vid, 
+        MockRekognitionClient(), 
+        MockS3Resource("test"), 
+        "test", 
+        collection_folder, 
+        temp_test_file, 
+        logger
+    ).detect_faces()
     if os.path.exists(temp_test_file):
         print(f"Temp file found, deleting...")
         os.remove(temp_test_file)

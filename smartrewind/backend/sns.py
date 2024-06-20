@@ -11,7 +11,7 @@ class SNS:
         topic = self.resource.create_topic(Name=self.topic_name)
         self.logger.log(Logger.Level.INFO, {
             "message": f"SNS Topic created",
-            "topic": topic
+            "topic": topic.__dict__
         })
         return topic
 

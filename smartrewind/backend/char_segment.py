@@ -18,7 +18,16 @@ class Collection:
     arn: str
 
 class CharacterTracking(Rekognition):
-    def __init__(self, name, queue, video, rekognition_client, s3_resource, collection_id, collection_folder, results_file_name, logger: Logger) -> None:
+    def __init__(self, 
+                 name, 
+                 queue, 
+                 video, 
+                 rekognition_client, 
+                 s3_resource, 
+                 collection_id, 
+                 collection_folder, 
+                 results_file_name, 
+                 logger: Logger) -> None:
         super().__init__(name, queue, video, rekognition_client, logger)
         self.collection = None
         self.collection_id = collection_id
@@ -29,8 +38,26 @@ class CharacterTracking(Rekognition):
     def create_collection(self):
         try:
             response = self.rekognition_client.create_collection(CollectionId=self.collection_id)
+            self.logger.log(
+                Logger.Level.DEBUG, {
+                    "response": response,
+                    "api": "create_collection",
+                    "params": {
+                        "collection_id": self.collection_id
+                    }
+                }
+            )
         except self.rekognition_client.exceptions.ResourceAlreadyExistsException:
-            print(f"Collection \"{self.collection_id}\"already exists")
+            self.logger.log(Logger.Level.INFO, {
+                "message": f"Collection \"{self.collection_id}\"already exists"
+            })
+        except ClientError as e:
+            self.logger.log(Logger.Level.ERROR, {
+                "message": f"Collection could not be created",
+                "error": e.response,
+                "api": "create_collection"
+            })
+            raise Exception("Create collection error")
         self.collection = Collection(self.collection_id, '')#response['CollectionArn'])
 
     def load_images_to_collection(self):
@@ -50,8 +77,22 @@ class CharacterTracking(Rekognition):
                                   MaxFaces=1,
                                   QualityFilter="LOW",
                                   DetectionAttributes=['DEFAULT'])
+                self.logger.log(Logger.Level.INFO, {
+                    "response": response,
+                    "api": "index_faces",
+                    "params": {
+                        "collection_id": self.collection_id,
+                        "image": character.s3,
+                        "external_image_id": character.name
+                    }
+                })
             except ClientError as e:
-                print(f"Error encountered for {filename}: {e}")
+                self.logger.log(Logger.Level.ERROR, {
+                    "message": f"Error encountered for {filename}",
+                    "error": e.response,
+                    "api": "index_faces"
+                })
+                raise Exception(f"Index Faces error")
 
 
     def detect_faces(self):

@@ -6,3 +6,4 @@ smartrewind.egg-info
 .venv
 .pytest_cache
 *pycache*
+logs

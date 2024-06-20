@@ -35,7 +35,12 @@ def process_video(
     emit(progress_state_machine, 5, "Uploading video to S3...")
     video = Video(path=video_file_path, s3_resource=s3_resource, logger=logger, object=None)#{"S3Object": {"Bucket": BUCKET_NAME, "Name": video_file_name}})
     emit(progress_state_machine, 15, "Creating SQS queue for completion notification...")
-    queue = Queue(notif_channel_name=name, iam_resource=iam_resource, sns_resource=sns_resource, sqs_resource=sqs_resource, logger=logger)
+    queue = Queue(
+        notif_channel_name=name, 
+        iam_resource=iam_resource, 
+        sns_resource=sns_resource, 
+        sqs_resource=sqs_resource, 
+        logger=logger)
     queue.create()
     emit(progress_state_machine, 25, "Segmenting by character appearances...")
     processor = CharacterTracking(

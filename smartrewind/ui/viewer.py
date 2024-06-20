@@ -42,10 +42,10 @@ class Viewer(QMainWindow):
         layout.addWidget(self.controller.start_process_button)
         self.central_layout.addLayout(layout)
 
-def launch_app(logger: Logger):
+def launch_app(logger: Logger, debug=True):
     try:
         app = QApplication(sys.argv)
-        m = Model(logger)
+        m = Model(logger, debug=True)
         c = Controller(m)
         w = Viewer(c)
         w.show()

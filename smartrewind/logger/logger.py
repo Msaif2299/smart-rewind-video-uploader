@@ -34,9 +34,9 @@ class Logger:
             raise Exception("Unable to create file, maybe write access is not granted")
 
     def log(self, level: Level, data: dict):
+        str_data = json.dumps(data)
         if self.test_dummy:
             return
-        str_data = json.dumps(data)
         self.queue.put(f"{level}||{str_data}")
 
     def start(self):

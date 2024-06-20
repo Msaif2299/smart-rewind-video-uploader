@@ -16,7 +16,11 @@ class UploadVideoFileButton(ComboButton):
         # open the folder of the video
         if self.model.video_file_location != "":
             opening_directory = "/".join(self.model.video_file_location.split("/")[:-1])
-        filename, _ = QFileDialog.getOpenFileName(self, "Upload Video File", opening_directory, "Video (*.mp4)")
+        filename, _ = QFileDialog.getOpenFileName(
+            self, 
+            "Upload Video File", 
+            opening_directory, 
+            "Video (*.mp4)")
         if filename != "" and filename is not None:
             self.model.video_file_location = filename
         self.set_text(self.model.video_file_location)
