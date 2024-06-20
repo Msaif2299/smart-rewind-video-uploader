@@ -1,11 +1,18 @@
+import pytest
+
 from smartrewind.backend.sns import SNS
 from smartrewind.backend.tests.mocks.sns import MockSNSResource
+from smartrewind.logger import Logger
 
-def test_sns_create():
-    SNS("test", MockSNSResource()).create()
+@pytest.fixture(autouse=True)
+def logger():
+    yield Logger("", True)
 
-def test_sns_get_topic():
-    sns = SNS("test", MockSNSResource())
+def test_sns_create(logger: Logger):
+    SNS("test", MockSNSResource(), logger).create()
+
+def test_sns_get_topic(logger: Logger):
+    sns = SNS("test", MockSNSResource(), logger)
     topic_1 = sns.get_topic()
     topic_2 = sns.get_topic()
     assert(topic_1 == topic_2)

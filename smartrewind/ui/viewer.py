@@ -1,9 +1,12 @@
-from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QVBoxLayout, QHBoxLayout
+import traceback
 import sys
+
+from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QVBoxLayout, QHBoxLayout
+
 from smartrewind.ui.controller import Controller
 from smartrewind.ui.model import Model
-from logger import Logger
-import traceback
+from smartrewind.logger import Logger
+
 class Viewer(QMainWindow):
     def __init__(self, controller: Controller) -> None:
         super().__init__()

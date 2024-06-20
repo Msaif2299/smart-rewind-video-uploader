@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QPushButton, QSizePolicy
+
 from smartrewind.ui.display_file_loc_label import DisplayFileLocLabel
 from smartrewind.ui.user_action_status_label import UserActionStatusLabel
 from smartrewind.ui.model import Model

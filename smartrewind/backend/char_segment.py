@@ -1,9 +1,11 @@
-from smartrewind.backend.rekognition import Rekognition
+from botocore.exceptions import ClientError
 from dataclasses import dataclass
 import os
+
 from smartrewind.backend.s3 import Image, BUCKET_NAME
-from botocore.exceptions import ClientError
 from smartrewind.backend.rekognition_objects import RekognitionCollectionTracking
+from smartrewind.logger import Logger
+from smartrewind.backend.rekognition import Rekognition
 
 @dataclass
 class Character:
@@ -16,8 +18,8 @@ class Collection:
     arn: str
 
 class CharacterTracking(Rekognition):
-    def __init__(self, name, queue, video, rekognition_client, s3_resource, collection_id, collection_folder, results_file_name) -> None:
-        super().__init__(name, queue, video, rekognition_client)
+    def __init__(self, name, queue, video, rekognition_client, s3_resource, collection_id, collection_folder, results_file_name, logger: Logger) -> None:
+        super().__init__(name, queue, video, rekognition_client, logger)
         self.collection = None
         self.collection_id = collection_id
         self.results_file_name = results_file_name
@@ -37,7 +39,7 @@ class CharacterTracking(Rekognition):
         for file in os.listdir(directory):
             filename = os.fsdecode(file)
             if should_upload:
-                s3_object = Image(self.collection_folder + '/' + filename, self.s3_resource).get_object()
+                s3_object = Image(self.collection_folder + '/' + filename, self.s3_resource, self.logger).get_object()
             else:
                 s3_object = {"S3Object": {"Bucket": BUCKET_NAME, "Name": filename}}
             character = Character(filename.split(".")[0], s3_object)

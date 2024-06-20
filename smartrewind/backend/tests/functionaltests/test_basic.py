@@ -1,10 +1,12 @@
+import pytest
+
 from smartrewind.backend.tests.mocks.iam import MockIAMResource
 from smartrewind.backend.tests.mocks.rekognition import MockRekognitionClient
 from smartrewind.backend.tests.mocks.sns import MockSNSResource
 from smartrewind.backend.tests.mocks.sqs import MockSQSResource
 from smartrewind.backend.tests.mocks.s3 import MockS3Resource
 from smartrewind.backend.main_process import process_video
-import pytest
+from smartrewind.logger import Logger
 
 @pytest.fixture()
 def generated_meta_data_dict():
@@ -25,6 +27,7 @@ def generated_meta_data_dict():
         rekognition_client,
         video_file_path=output_directory_path+video_file_name,
         collection_path="./smartrewind/assets/sample_collection",
+        logger=Logger("", True),
         output_metadata_file_path=output_directory_path
     )
     

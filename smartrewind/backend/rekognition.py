@@ -1,11 +1,15 @@
 from botocore.exceptions import ClientError
+
 from smartrewind.backend.rekognition_objects import RekognitionPerson
+from smartrewind.logger import Logger
+
 class Rekognition:
-    def __init__(self, name, queue, video, rekognition_client) -> None:
+    def __init__(self, name, queue, video, rekognition_client, logger: Logger) -> None:
         self.name = name
         self.queue = queue
         self.video = video
         self.rekognition_client = rekognition_client
+        self.logger = logger
 
     def _start_job(self, start_job_func, job_description, **kwargs):
         try:
@@ -14,16 +18,27 @@ class Rekognition:
                 NotificationChannel=self.queue.get_notification_channel(),
                 **kwargs
             )
+            self.logger.log(Logger.Level.DEBUG, {
+                "response": response,
+                "params": {
+                    "video": self.video.get_object(),
+                    "notif_channel": self.queue.get_notification_channel(),
+                    "kwargs": kwargs
+                },
+                "api": f"start_job_func, name:{start_job_func.__name__}"
+            })
             job_id = response["JobId"]
-            print(
-                "Started %s job %s on %s.", job_description, job_id, self.video.name
-            )
-        except ClientError:
-            raise Exception(
-                "Couldn't start %s job on %s.", job_description, self.video.name
-            )
-        else:
-            return job_id
+            self.logger.log(Logger.Level.INFO, {
+                "message": f"Started {job_description} job {job_id} on {self.video.name}"
+            })
+        except ClientError as e:
+            self.logger.log(Logger.Level.ERROR, {
+                "message": f"Couldn't start {job_description} on {self.video.name}",
+                "error": e.response,
+                "api": f"start_job_func, name:{start_job_func.__name__}"
+            })
+            raise Exception(f"Couldn't start {job_description} on {self.video.name}")
+        return job_id
         
     def _get_rekognition_job_results(self, job_id, get_results_func, result_extractor):
         try:
@@ -32,19 +47,32 @@ class Rekognition:
             overall_results = []
             while not finished:
                 response = get_results_func(JobId=job_id, NextToken=pagination_token)
-                print("Job %s has status: %s.", job_id, response["JobStatus"])
+                self.logger.log(Logger.Level.DEBUG, {
+                    "response": response,
+                    "params": {
+                        "JobId": job_id,
+                        "NextToken": pagination_token
+                    },
+                    "api": f"get_results_func, name:{get_results_func.__name__}"
+                })
+                self.logger.log(Logger.Level.INFO, f'Job {job_id} has status: {response["JobStatus"]}')
                 results = result_extractor(response)
-                with open("C:/Users/Mohammad Saif/Documents/Masters/MSc Project/video_metadata_generator/smartrewind/assets/results-raw.txt", "w") as f:
-                    print(response, file=f)
                 for r in results:
                     overall_results.append(r)
-                print("Found %s items in %s.", len(results), self.video.name)
+                self.logger.log(Logger.Level.INFO, {
+                    "message": f"Found {len(results)} items in {self.video.name} from {get_results_func.__name__}"
+                })
                 if 'NextToken' in response:
                     pagination_token = response['NextToken']
                 else:
                     finished = True
-        except ClientError:
-            raise Exception("Couldn't get items for %s.", job_id)
+        except ClientError as e:
+            self.logger.log(Logger.Level.ERROR, {
+                "message": f"Couldn't get items for {job_id}",
+                "error": e.response,
+                "api":  f"get_results_func, name:{get_results_func.__name__}"
+            })
+            raise Exception(f"Couldn't get items for {job_id}")
         else:
             return overall_results
         

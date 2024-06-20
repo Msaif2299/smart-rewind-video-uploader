@@ -1,6 +1,7 @@
 import pytest
-from smartrewind.backend.compressor import *
 import os
+
+from smartrewind.backend.compressor import *
 
 TEST_ASSETS_FOLDER = "./smartrewind/backend/tests/test_assets/"
 

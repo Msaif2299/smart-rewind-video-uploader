@@ -1,5 +1,5 @@
 from smartrewind.ui import launch_app
-from logger import Logger
+from smartrewind.logger import Logger
 
 logging_folder = "./logs"
 logger = Logger(logging_folder)

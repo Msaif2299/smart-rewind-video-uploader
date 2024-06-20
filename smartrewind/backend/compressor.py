@@ -1,4 +1,5 @@
 from typing import Dict, List
+
 THRESHOLD_IN_MS = 5000
 
 def extract_character_time_slots(input_file: str) -> Dict:

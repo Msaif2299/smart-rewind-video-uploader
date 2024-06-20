@@ -1,6 +1,7 @@
-from smartrewind.logger import Logger
 import os
 import shutil
+
+from smartrewind.logger import Logger
 
 def test_basic():
     foldername = "./temp_logs"

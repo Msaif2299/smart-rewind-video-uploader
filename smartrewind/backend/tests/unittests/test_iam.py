@@ -1,29 +1,36 @@
+import pytest
+
 from smartrewind.backend.iam import IAM
 from smartrewind.backend.sns import SNS
-import pytest
 from smartrewind.backend.tests.mocks.sns import MockSNSResource
 from smartrewind.backend.tests.mocks.iam import MockIAMResource, MockIAMResourceErrorCases
+from smartrewind.logger import Logger
 
-def test_iam_create():
-    IAM("test", MockIAMResource(MockIAMResourceErrorCases()), SNS("test", MockSNSResource()).get_topic()).create()
+@pytest.fixture(autouse=True)
+def logger():
+    logger = Logger("", True)
+    yield logger
 
-def test_iam_create_role_client_error():
+def test_iam_create(logger: Logger):
+    IAM("test", MockIAMResource(MockIAMResourceErrorCases()), SNS("test", MockSNSResource(), logger).get_topic(), logger).create()
+
+def test_iam_create_role_client_error(logger: Logger):
     with pytest.raises(Exception):
-        IAM("test", MockIAMResource(MockIAMResourceErrorCases(raise_create_role_error=True)), SNS("test", MockSNSResource()).get_topic()).create()
+        IAM("test", MockIAMResource(MockIAMResourceErrorCases(raise_create_role_error=True)), SNS("test", MockSNSResource(), logger).get_topic(), logger).create()
 
-def test_iam_create_role_client_error_entity_already_exists():
-    IAM("test", MockIAMResource(MockIAMResourceErrorCases(raise_create_role_error_entity_already_exists=True)), SNS("test", MockSNSResource()).get_topic()).create()
+def test_iam_create_role_client_error_entity_already_exists(logger: Logger):
+    IAM("test", MockIAMResource(MockIAMResourceErrorCases(raise_create_role_error_entity_already_exists=True)), SNS("test", MockSNSResource(), logger).get_topic(), logger).create()
 
-def test_iam_create_policy_client_error():
+def test_iam_create_policy_client_error(logger: Logger):
     with pytest.raises(Exception):
-        IAM("test", MockIAMResource(MockIAMResourceErrorCases(raise_create_policy_error=True)), SNS("test", MockSNSResource()).get_topic()).create()
+        IAM("test", MockIAMResource(MockIAMResourceErrorCases(raise_create_policy_error=True)), SNS("test", MockSNSResource(), logger).get_topic(), logger).create()
 
-def test_iam_create_policy_client_error_entity_already_exists():
-    IAM("test", MockIAMResource(MockIAMResourceErrorCases(raise_create_policy_error_entity_already_exists=True)), SNS("test", MockSNSResource()).get_topic()).create()
+def test_iam_create_policy_client_error_entity_already_exists(logger: Logger):
+    IAM("test", MockIAMResource(MockIAMResourceErrorCases(raise_create_policy_error_entity_already_exists=True)), SNS("test", MockSNSResource(), logger).get_topic(), logger).create()
 
-def test_iam_policy_not_found():
+def test_iam_policy_not_found(logger: Logger):
     with pytest.raises(Exception):
-        IAM("test", IAM("test", MockIAMResource(MockIAMResourceErrorCases(raise_policy_not_found_error=True)), SNS("test", MockSNSResource()).get_topic()).create())
+        IAM("test", IAM("test", MockIAMResource(MockIAMResourceErrorCases(raise_policy_not_found_error=True)), SNS("test", MockSNSResource(), logger).get_topic(), logger).create())
 
-def test_iam_get_role():
-    IAM("test", MockIAMResource(MockIAMResourceErrorCases()), SNS("test", MockSNSResource()).get_topic()).get_role()
+def test_iam_get_role(logger: Logger):
+    IAM("test", MockIAMResource(MockIAMResourceErrorCases()), SNS("test", MockSNSResource(), logger).get_topic(), logger).get_role()

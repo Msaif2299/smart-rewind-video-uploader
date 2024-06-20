@@ -1,9 +1,10 @@
 from smartrewind.backend.rekognition import Rekognition
 from smartrewind.backend.rekognition_objects import RekognitionTimelineSegmentation
+from smartrewind.logger import Logger
 
 class TimelineSegment(Rekognition):
-    def __init__(self, name, queue, video, rekognition_client, results_file_name) -> None:
-        super().__init__(name, queue, video, rekognition_client)
+    def __init__(self, name, queue, video, rekognition_client, results_file_name, logger: Logger) -> None:
+        super().__init__(name, queue, video, rekognition_client, logger)
         self.results_file_name = results_file_name
 
     def segment(self):

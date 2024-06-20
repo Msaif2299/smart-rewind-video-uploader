@@ -1,10 +1,10 @@
+from typing import Optional
+
 from PyQt5.QtGui import QMouseEvent
 from PyQt5.QtWidgets import QFileDialog
-from user_action_status_label import UserActionStatusLabel
-from display_file_loc_label import DisplayFileLocLabel
-from base_button_style import ComboButton
-from model import Model
-from typing import Optional
+
+from smartrewind.ui.base_button_style import ComboButton
+from smartrewind.ui.model import Model
 
 class ChooseMetadataFileStorageButton(ComboButton):
     def __init__(self, model: Model):

@@ -1,7 +1,9 @@
+import os
+
 from PyQt5.QtWidgets import QProgressDialog, QMessageBox
 from PyQt5.QtCore import QSize
+
 from smartrewind.ui.model import Model
-import os
 
 LABEL_TEXT_CHAR_LIMIT = 60
 

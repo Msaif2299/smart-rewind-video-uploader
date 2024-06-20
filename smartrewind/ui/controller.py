@@ -3,6 +3,7 @@ from smartrewind.ui.button_collection_folder import ChooseCollectionFolderButton
 from smartrewind.ui.button_metadata_file_storage import ChooseMetadataFileStorageButton
 from smartrewind.ui.button_start_process import StartProcessButton
 from smartrewind.ui.model import Model
+
 class Controller:
     def __init__(self, model: Model) -> None:
         self.model = model

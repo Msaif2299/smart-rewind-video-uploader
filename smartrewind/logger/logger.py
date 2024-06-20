@@ -13,7 +13,10 @@ class Logger:
         INFO = "INFO"
         WARNING = "WARNING"
         ERROR = "ERROR"
-    def __init__(self, folder_loc) -> None:
+    def __init__(self, folder_loc, test_dummy=False) -> None:
+        self.test_dummy = test_dummy
+        if test_dummy:
+            return
         self.queue = Queue(maxsize=0)
         self.lock = Lock()
         self.workers = [Thread(target=self.logEvent, args=(f"logging_thread_{idx+1}",)) for idx in range(THREAD_COUNT)]
@@ -31,6 +34,8 @@ class Logger:
             raise Exception("Unable to create file, maybe write access is not granted")
 
     def log(self, level: Level, data: dict):
+        if self.test_dummy:
+            return
         str_data = json.dumps(data)
         self.queue.put(f"{level}||{str_data}")
 

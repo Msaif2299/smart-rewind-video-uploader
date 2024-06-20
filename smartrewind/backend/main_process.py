@@ -1,20 +1,16 @@
-from smartrewind.backend.char_segment import CharacterTracking
+import os
+import shutil
 import boto3
+from typing import Optional
+
 from smartrewind.backend.sqs import Queue
 from smartrewind.backend.s3 import Video, BUCKET_NAME
 from smartrewind.backend.scene_segment import TimelineSegment
 from smartrewind.backend.compressor import extract_timeslots
-import os
-import shutil
+from smartrewind.backend.char_segment import CharacterTracking
+from smartrewind.backend.common import emit
 from smartrewind.progresstracker.statemachine import ProgressStateMachine
-from typing import Optional
-import time
-
-def emit(progress_state_machine:Optional[ProgressStateMachine], value: int, message: str):
-    if progress_state_machine is not None:
-        progress_state_machine.forward_progress_signal.emit(value, message)
-        #test
-        time.sleep(1)
+from smartrewind.logger import Logger
 
 def process_video(
         iam_resource, 
@@ -25,6 +21,7 @@ def process_video(
         video_file_path, 
         collection_path, 
         output_metadata_file_path,
+        logger: Logger,
         progress_state_machine:Optional[ProgressStateMachine]=None):
     
     name = "aphasia"
@@ -36,9 +33,9 @@ def process_video(
     video_name = video_file_path.split("/")[-1].split(".")[0]
     output_metadata_file_path = output_metadata_file_path+f"/{video_name}_metadata.txt"
     emit(progress_state_machine, 5, "Uploading video to S3...")
-    video = Video(path=video_file_path, s3_resource=s3_resource, object=None)#{"S3Object": {"Bucket": BUCKET_NAME, "Name": video_file_name}})
+    video = Video(path=video_file_path, s3_resource=s3_resource, logger=logger, object=None)#{"S3Object": {"Bucket": BUCKET_NAME, "Name": video_file_name}})
     emit(progress_state_machine, 15, "Creating SQS queue for completion notification...")
-    queue = Queue(notif_channel_name=name, iam_resource=iam_resource, sns_resource=sns_resource, sqs_resource=sqs_resource)
+    queue = Queue(notif_channel_name=name, iam_resource=iam_resource, sns_resource=sns_resource, sqs_resource=sqs_resource, logger=logger)
     queue.create()
     emit(progress_state_machine, 25, "Segmenting by character appearances...")
     processor = CharacterTracking(
@@ -49,7 +46,8 @@ def process_video(
         s3_resource=s3_resource, 
         collection_id=f"{name}_{video_name}",
         collection_folder=collection_path,
-        results_file_name=char_segments_results_file_path)
+        results_file_name=char_segments_results_file_path,
+        logger=logger)
     processor.detect_faces()
     emit(progress_state_machine, 50, "Segmenting by scenes...")
     processor = TimelineSegment(
@@ -57,7 +55,8 @@ def process_video(
         queue=queue, 
         video=video, 
         rekognition_client=rekognition_client, 
-        results_file_name=scene_segments_results_file_path)
+        results_file_name=scene_segments_results_file_path,
+        logger=logger)
     processor.segment()
     emit(progress_state_machine, 75, "Merging data from character and scene segmenting...")
     extract_timeslots(char_segments_results_file_path, scene_segments_results_file_path, output_metadata_file_path)
@@ -65,7 +64,9 @@ def process_video(
     try:
         shutil.rmtree(directory_path)
     except OSError as e:
-        print(f"Encountered error while deleting temp directory: {e.strerror}")
+        logger.log(Logger.Level.ERROR, {
+            "message": f"Encountered error while deleting temp directory: {e.strerror}"
+        })
     emit(progress_state_machine, 100, f"Metadata file stored in {output_metadata_file_path}...")
 
 if __name__=="__main__":

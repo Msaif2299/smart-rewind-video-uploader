@@ -1,10 +1,12 @@
+from typing import Optional
+import threading
+
 from PyQt5.QtGui import QMouseEvent
 from PyQt5.QtWidgets import QSizePolicy, QPushButton
-from typing import Optional
+
 from smartrewind.ui.model import Model
 from smartrewind.backend.main_process import process_video
 from smartrewind.ui.process_window import ProcessingWindow
-import threading
 
 class StartProcessButton(QPushButton):
     def __init__(self, model: Model):
