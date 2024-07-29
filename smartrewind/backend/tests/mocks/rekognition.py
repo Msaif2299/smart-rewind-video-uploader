@@ -135,4 +135,6 @@ class MockRekognitionClient:
     def create_collection(self, **kwargs):
         pass
     def index_faces(self, **kwargs):
-        pass
+        return {
+            "test": "success"
+        }

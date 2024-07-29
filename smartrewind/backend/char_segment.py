@@ -1,6 +1,7 @@
 from botocore.exceptions import ClientError
-from dataclasses import dataclass
+from dataclasses import dataclass, field, asdict
 import os
+from typing import Dict
 
 from smartrewind.backend.s3 import Image, BUCKET_NAME
 from smartrewind.backend.rekognition_objects import RekognitionCollectionTracking
@@ -10,7 +11,7 @@ from smartrewind.backend.rekognition import Rekognition
 @dataclass
 class Character:
     name: str
-    s3: dict
+    s3: dict[str,dict[str,str]] = field(default_factory=dict)
 
 @dataclass
 class Collection:
@@ -77,6 +78,15 @@ class CharacterTracking(Rekognition):
                                   MaxFaces=1,
                                   QualityFilter="LOW",
                                   DetectionAttributes=['DEFAULT'])
+                print({
+                    "response": response,
+                    "api": "index_faces",
+                    "params": {
+                        "collection_id": self.collection_id,
+                        "image": character.s3,
+                        "external_image_id": character.name
+                    }
+                })
                 self.logger.log(Logger.Level.INFO, {
                     "response": response,
                     "api": "index_faces",

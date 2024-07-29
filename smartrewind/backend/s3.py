@@ -13,7 +13,7 @@ from smartrewind.logger import Logger
 BUCKET_NAME = "msc-test-final-bucket-2"
 
 class Object:
-    def __init__(self, path, s3_resource, logger: Logger, object=Optional[Dict]) -> None:
+    def __init__(self, path, s3_resource, logger: Logger, object:Optional[Dict]=None) -> None:
         self.path = path
         self.name = os.path.basename(path)
         self.bucket_name = BUCKET_NAME
@@ -21,10 +21,11 @@ class Object:
         self.s3_resource = s3_resource
         self.logger = logger
     
-    def get_object(self) -> Dict:
+    def get_object(self) -> dict[str,dict[str,str]]:
         if self.object is None:
             self.object = self.upload()
         return self.object
+
         
     def upload(self) -> Optional[Dict]:
         if self.path is None or self.path == "":
@@ -104,9 +105,9 @@ class Object:
         return {"S3Object": {"Bucket": obj.bucket_name, "Name": obj.key}}
 
 class Image(Object):
-    def __init__(self, path, s3_resource, logger: Logger, object=Optional[Dict]) -> None:
+    def __init__(self, path, s3_resource, logger: Logger, object:Optional[Dict]=None) -> None:
         super().__init__(path, s3_resource, logger, object)
 
 class Video(Object):
-    def __init__(self, path, s3_resource, logger: Logger, object=Optional[Dict]) -> None:
+    def __init__(self, path, s3_resource, logger: Logger, object:Optional[Dict]=None) -> None:
         super().__init__(path, s3_resource, logger, object)
