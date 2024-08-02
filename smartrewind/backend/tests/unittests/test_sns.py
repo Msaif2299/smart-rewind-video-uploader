@@ -1,7 +1,7 @@
 import pytest
 
 from smartrewind.backend.sns import SNS
-from smartrewind.backend.tests.mocks.sns import MockSNSResource
+from smartrewind.backend.tests.mocks.mock_sns import MockSNSResource
 from smartrewind.logger import Logger
 
 @pytest.fixture(autouse=True)

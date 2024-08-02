@@ -1,9 +1,9 @@
 import pytest
 
 from smartrewind.backend.sqs import Queue
-from smartrewind.backend.tests.mocks.iam import MockIAMResource, MockIAMResourceErrorCases
-from smartrewind.backend.tests.mocks.sns import MockSNSResource
-from smartrewind.backend.tests.mocks.sqs import MockSQSResource
+from smartrewind.backend.tests.mocks.mock_iam import MockIAMResource, MockIAMResourceErrorCases
+from smartrewind.backend.tests.mocks.mock_sns import MockSNSResource
+from smartrewind.backend.tests.mocks.mock_sqs import MockSQSResource
 from smartrewind.logger import Logger
 
 @pytest.fixture(autouse=True)

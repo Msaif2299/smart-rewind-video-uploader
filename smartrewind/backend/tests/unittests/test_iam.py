@@ -2,8 +2,8 @@ import pytest
 
 from smartrewind.backend.iam import IAM
 from smartrewind.backend.sns import SNS
-from smartrewind.backend.tests.mocks.sns import MockSNSResource
-from smartrewind.backend.tests.mocks.iam import MockIAMResource, MockIAMResourceErrorCases
+from smartrewind.backend.tests.mocks.mock_sns import MockSNSResource
+from smartrewind.backend.tests.mocks.mock_iam import MockIAMResource, MockIAMResourceErrorCases
 from smartrewind.logger import Logger
 
 @pytest.fixture(autouse=True)

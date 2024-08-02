@@ -1,7 +1,7 @@
 import pytest
 
 from smartrewind.backend.s3 import Video, Image
-from smartrewind.backend.tests.mocks.s3 import MockS3Resource, MockS3ResourceErrorCases
+from smartrewind.backend.tests.mocks.mock_s3 import MockS3Resource, MockS3ResourceErrorCases
 from smartrewind.logger import Logger
 
 @pytest.fixture(autouse=True)
