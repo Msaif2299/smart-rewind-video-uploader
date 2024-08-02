@@ -45,7 +45,7 @@ class Viewer(QMainWindow):
 def launch_app(logger: Logger, debug=True):
     try:
         app = QApplication(sys.argv)
-        m = Model(logger, debug=True)
+        m = Model(logger, debug)
         c = Controller(m)
         w = Viewer(c)
         w.show()

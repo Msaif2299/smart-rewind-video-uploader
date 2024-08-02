@@ -52,9 +52,11 @@ def process_video(
         collection_id=f"{name}_{video_name}",
         collection_folder=collection_path,
         results_file_name=char_segments_results_file_path,
-        logger=logger)
+        logger=logger,
+        progress_state_machine=progress_state_machine)
     processor.detect_faces()
     emit(progress_state_machine, 50, "Segmenting by scenes...")
+    emit(progress_state_machine, 50, "Waiting for job completion from AWS...")
     processor = TimelineSegment(
         name=name, 
         queue=queue, 

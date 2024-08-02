@@ -2,11 +2,11 @@ import boto3
 
 from PyQt5.QtCore import pyqtSignal, QObject
 
-from smartrewind.backend.tests.mocks.iam import MockIAMResource
-from smartrewind.backend.tests.mocks.sns import MockSNSResource
-from smartrewind.backend.tests.mocks.sqs import MockSQSResource
-from smartrewind.backend.tests.mocks.s3 import MockS3Resource
-from smartrewind.backend.tests.mocks.rekognition import MockRekognitionClient
+from smartrewind.backend.tests.mocks.mock_iam import MockIAMResource
+from smartrewind.backend.tests.mocks.mock_sns import MockSNSResource
+from smartrewind.backend.tests.mocks.mock_sqs import MockSQSResource
+from smartrewind.backend.tests.mocks.mock_s3 import MockS3Resource
+from smartrewind.backend.tests.mocks.mock_rekognition import MockRekognitionClient
 from smartrewind.progresstracker.statemachine import ProgressStateMachine
 from smartrewind.logger import Logger
 

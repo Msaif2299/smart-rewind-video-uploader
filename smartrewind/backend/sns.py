@@ -1,3 +1,5 @@
+import json
+
 from smartrewind.logger import Logger
 
 class SNS:
@@ -11,7 +13,7 @@ class SNS:
         topic = self.resource.create_topic(Name=self.topic_name)
         self.logger.log(Logger.Level.INFO, {
             "message": f"SNS Topic created",
-            "topic": topic.__dict__
+            "topic": repr(topic)
         })
         return topic
 

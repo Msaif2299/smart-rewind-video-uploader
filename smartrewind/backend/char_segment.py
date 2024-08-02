@@ -1,12 +1,13 @@
 from botocore.exceptions import ClientError
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field
 import os
-from typing import Dict
 
+from smartrewind.backend.common import emit
 from smartrewind.backend.s3 import Image, BUCKET_NAME
 from smartrewind.backend.rekognition_objects import RekognitionCollectionTracking
 from smartrewind.logger import Logger
 from smartrewind.backend.rekognition import Rekognition
+from smartrewind.progresstracker.statemachine import ProgressStateMachine
 
 @dataclass
 class Character:
@@ -28,16 +29,19 @@ class CharacterTracking(Rekognition):
                  collection_id, 
                  collection_folder, 
                  results_file_name, 
-                 logger: Logger) -> None:
+                 logger: Logger,
+                 progress_state_machine: ProgressStateMachine) -> None:
         super().__init__(name, queue, video, rekognition_client, logger)
         self.collection = None
         self.collection_id = collection_id
         self.results_file_name = results_file_name
         self.s3_resource = s3_resource
         self.collection_folder = collection_folder
+        self.progress_state_machine = progress_state_machine
 
     def create_collection(self):
         try:
+            emit(self.progress_state_machine, 25, "Creating collection...")
             response = self.rekognition_client.create_collection(CollectionId=self.collection_id)
             self.logger.log(
                 Logger.Level.DEBUG, {
@@ -66,6 +70,7 @@ class CharacterTracking(Rekognition):
         directory = os.fsencode(self.collection_folder)
         for file in os.listdir(directory):
             filename = os.fsdecode(file)
+            emit(self.progress_state_machine, 30, f"Uploading {filename} to collection")
             if should_upload:
                 s3_object = Image(self.collection_folder + '/' + filename, self.s3_resource, self.logger).get_object()
             else:
@@ -78,15 +83,6 @@ class CharacterTracking(Rekognition):
                                   MaxFaces=1,
                                   QualityFilter="LOW",
                                   DetectionAttributes=['DEFAULT'])
-                print({
-                    "response": response,
-                    "api": "index_faces",
-                    "params": {
-                        "collection_id": self.collection_id,
-                        "image": character.s3,
-                        "external_image_id": character.name
-                    }
-                })
                 self.logger.log(Logger.Level.INFO, {
                     "response": response,
                     "api": "index_faces",
@@ -108,6 +104,7 @@ class CharacterTracking(Rekognition):
     def detect_faces(self):
         self.create_collection()
         self.load_images_to_collection()
+        emit(self.progress_state_machine, 40, "Waiting for job completion from AWS")
         return self._do_rekognition_job(
             "person tracking",
             self.rekognition_client.start_face_search,
