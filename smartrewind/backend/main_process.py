@@ -1,3 +1,11 @@
+"""
+Many of the files in the "backend" package possess code from the following sources
+Code Source: https://github.com/awsdocs/amazon-rekognition-developer-guide/tree/master/code_examples/
+Code Source: https://docs.aws.amazon.com/rekognition/latest/dg/video-analyzing-with-sqs.html
+Code Source: https://docs.aws.amazon.com/rekognition/latest/dg/faces-sqs-video.html
+Code Source: https://docs.aws.amazon.com/rekognition/latest/dg/segment-example.html
+"""
+
 import os
 import shutil
 import boto3
