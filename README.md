@@ -1,6 +1,4 @@
-# smart-rewind-video-player
-
-For Novel Accessibility Interventions Project
+# Smart Rewind Video Uploader
 
 In order to use the video uploader, an AWS account must be configured. Go to https://aws.amazon.com to create an account.
 Once the account is created, follow the steps:
