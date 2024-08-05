@@ -22,3 +22,13 @@ Once the account is created, follow the steps:
 Now if you run the .exe file, it should work.
 If you wish to run the overall project without the .exe file, run the following command:
 `py ./smartrewind/main.py`
+
+To generate the pytest coverage report in the console first navigate to the root of this project, then run the commands:
+
+- `pytest --cov ./smartrewind/backend`
+- `pytest --cov ./smartrewind/logger`
+
+To generate the pytest coverage report in the HTML format:
+
+- `pytest --cov --cov-report=html:./htmlcov_backend ./smartrewind/backend`
+- `pytest --cov --cov-report=html:./htmlcov_logger ./smartrewind/logger`

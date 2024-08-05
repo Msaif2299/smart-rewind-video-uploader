@@ -13,9 +13,9 @@ class Logger:
         INFO = "INFO"
         WARNING = "WARNING"
         ERROR = "ERROR"
-    def __init__(self, folder_loc, test_dummy=False) -> None:
-        self.test_dummy = test_dummy
-        if test_dummy:
+    def __init__(self, folder_loc, disable_log=False) -> None:
+        self.disable_log = disable_log
+        if disable_log:
             return
         self.queue = Queue(maxsize=0)
         self.lock = Lock()
@@ -24,7 +24,7 @@ class Logger:
         if not os.path.exists(folder_loc) or not os.path.isdir(folder_loc):
             try:
                 os.mkdir(folder_loc)
-            except FileNotFoundError:
+            except OSError:
                 raise Exception("Invalid folder path passed to logger")
         try:
             self.log_file = open(folder_loc + f"/log_file_{datetime.now().strftime('%d_%m_%Y_%H_%M_%S')}.txt", "w")
@@ -35,7 +35,7 @@ class Logger:
 
     def log(self, level: Level, data: dict):
         str_data = json.dumps(data)
-        if self.test_dummy:
+        if self.disable_log:
             return
         self.queue.put(f"{level}||{str_data}")
 
