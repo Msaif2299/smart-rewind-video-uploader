@@ -8,3 +8,6 @@ smartrewind.egg-info
 *pycache*
 logs
 temp
+build
+dist
+*.spec

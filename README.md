@@ -18,7 +18,7 @@ Once the account is created, follow the steps:
   ```
 
 Now if you run the .exe file, it should work.
-If you wish to run the overall project without the .exe file, run the following command:
+If you wish to run the overall project, run the following command:
 `py ./smartrewind/main.py`
 
 To generate the pytest coverage report in the console first navigate to the root of this project, then run the commands:
