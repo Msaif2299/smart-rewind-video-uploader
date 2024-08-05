@@ -17,8 +17,9 @@ Once the account is created, follow the steps:
   region=us-east-1
   ```
 
-Now if you run the .exe file, it should work.
-If you wish to run the overall project, run the following command:
+Due to handling of secret credentials, an .exe file was not developed as I couldn't confirm whether credentials would have to be included in the executable or whether the .exe file would pick it up on its own.
+
+To run the application navigate to the root directory of the project `video_metadata_generator`, run the following command:
 `py ./smartrewind/main.py`
 
 To generate the pytest coverage report in the console first navigate to the root of this project, then run the commands:
