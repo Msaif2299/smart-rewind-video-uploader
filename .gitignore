@@ -7,3 +7,4 @@ smartrewind.egg-info
 .pytest_cache
 *pycache*
 logs
+temp
